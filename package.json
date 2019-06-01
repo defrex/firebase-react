@@ -1,0 +1,8 @@
+{
+  "name": "@spendwell/core",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "firebase-tools": "^6.10.0"
+  }
+}
