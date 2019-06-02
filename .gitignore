@@ -6,3 +6,4 @@ dist
 .firebase/
 .eslintcache
 .env
+.cache

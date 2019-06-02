@@ -6,8 +6,8 @@ export interface Script {
 }
 
 interface DocumentProps {
-  scripts: Script[]
   html: string
+  scripts?: Script[]
   css?: string
 }
 
@@ -21,13 +21,14 @@ export function Document({ html, css, scripts }: DocumentProps) {
       <body>
         <div id='app' dangerouslySetInnerHTML={{ __html: html }} />
 
-        {scripts.map(({ src, content }, index) => (
-          <script
-            key={index}
-            src={src}
-            dangerouslySetInnerHTML={content ? { __html: content } : undefined}
-          />
-        ))}
+        {scripts &&
+          scripts.map(({ src, content }, index) => (
+            <script
+              key={index}
+              src={src}
+              dangerouslySetInnerHTML={content ? { __html: content } : undefined}
+            />
+          ))}
       </body>
     </html>
   )

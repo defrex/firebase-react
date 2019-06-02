@@ -1,8 +1,12 @@
 import { https } from 'firebase-functions'
-import uiHandler from './ui'
+import { hotUiServer } from './ui'
 
 export const hello = https.onRequest((req, res) => {
   res.send('Hello Functions')
 })
 
-export const ui = https.onRequest(uiHandler)
+const uiServerPromise = hotUiServer()
+export const ui = https.onRequest(async (req, res) => {
+  const uiServer = await uiServerPromise
+  return uiServer(req, res)
+})
