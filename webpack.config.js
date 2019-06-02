@@ -1,7 +1,11 @@
 const { resolve } = require('path')
+const fs = require('fs')
+const { promisify } = require('util')
+const writeFile = promisify(fs.writeFile)
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
 const { StatsWriterPlugin } = require('webpack-stats-plugin')
+
 
 const config = {
   environment: process.env.NODE_ENV || 'production',
@@ -90,7 +94,7 @@ module.exports = [
 
     output: {
       ...base.output,
-      path: absolutePath('dist'),
+      path: absolutePath('dist/ui'),
       libraryTarget: 'commonjs2',
     },
 
@@ -112,7 +116,8 @@ module.exports = [
 
     output: {
       ...base.output,
-      path: absolutePath('dist'),
+      filename: 'index.js',
+      path: absolutePath('dist/functions'),
       libraryTarget: 'commonjs2',
     },
 
@@ -121,6 +126,31 @@ module.exports = [
     plugins: [
       ...base.plugins,
       new StatsWriterPlugin({ filename: 'functions-stats.json' }),
+      // {
+      //   apply(compiler) {
+      //     compiler.hooks.done.tapPromise('FunctionPackage', async (stats) => {
+      //       const {
+      //         name,
+      //         version,
+      //         private,
+      //         dependencies,
+      //       } = require('./package.json')
+      //       const functionPackage = {
+      //         name,
+      //         version,
+      //         private,
+      //         dependencies,
+      //         engines: { node: 10 },
+      //       }
+      //       await writeFile(
+      //         absolutePath('functions/dist/package.json'),
+      //         JSON.stringify(functionPackage),
+      //         'utf-8',
+      //       )
+
+      //     });
+      //   }
+      // }
     ],
   }
 ]

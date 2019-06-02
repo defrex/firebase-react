@@ -3,12 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "webpack",
-    "serve": "npm run build && firebase serve --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "build": "webpack && cp package* dist/functions && cd dist/functions && npm i"
   },
   "dependencies": {
     "@reach/router": "^1.2.1",
@@ -16,6 +11,7 @@
     "express": "^4.17.1",
     "firebase-admin": "^8.0.0",
     "firebase-functions": "^2.3.1",
+    "firebase-functions-test": "^0.1.6",
     "firebase-tools": "^6.10.0",
     "morgan": "^1.9.1",
     "react": "^16.8.6",
