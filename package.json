@@ -5,9 +5,10 @@
   "engines": {
     "node": "10"
   },
+  "main": "functions/index.js",
   "scripts": {
-    "build-public": "mkdir -p dist/public && cp -r public/* dist/public/",
-    "build-functions": "tsc && cp package* dist/functions && cd dist/functions && npm i --production",
+    "build-public": "mkdir -p dist/ && cp -r public/* dist/",
+    "build-functions": "tsc && cp package* dist && cd dist && npm i --production",
     "build-ui": "parcel build --out-dir=dist/ui ui/client.tsx ui/server.tsx",
     "build": "npm run build-public && npm run build-functions && npm run build-ui"
   },

@@ -2,11 +2,12 @@ import chokidar from 'chokidar'
 import { Request, Response } from 'express'
 import fs from 'fs'
 import ora from 'ora'
+import { resolve } from 'path'
 import requireFromString from 'require-from-string'
 import { promisify } from 'util'
 
 const readFile = promisify(fs.readFile)
-const serverFilename = '../ui/server.js'
+const serverFilename = resolve(`${__dirname}/../ui/server.js`)
 
 function defaultImport(obj: any) {
   return obj && obj.__esModule ? obj.default : obj

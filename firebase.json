@@ -1,17 +1,12 @@
 {
   "functions": {
-    "source": "dist/functions",
+    "source": "dist",
     "predeploy": [
-      "npm run build-ui",
-      "npm run build-functions"
+      "npm run build"
     ]
   },
   "hosting": {
     "public": "dist/public",
-    "predeploy": [
-      "npm run build-public",
-      "npm run build-ui"
-    ],
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   }
 }
