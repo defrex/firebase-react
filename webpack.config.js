@@ -1,7 +1,4 @@
 const { resolve } = require('path')
-const fs = require('fs')
-const { promisify } = require('util')
-const writeFile = promisify(fs.writeFile)
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
 const { StatsWriterPlugin } = require('webpack-stats-plugin')
@@ -69,7 +66,7 @@ module.exports = [
         ...(config.environment === 'development'
           ? ['webpack-hot-middleware/client']
           : []),
-        absolutePath('ui/renderers/client.tsx'),
+        absolutePath('ui/client.tsx'),
       ],
     },
 
@@ -89,7 +86,7 @@ module.exports = [
     target: 'node',
 
     entry: {
-      server: absolutePath('ui/renderers/server.tsx'),
+      server: absolutePath('ui/server.tsx'),
     },
 
     output: {
@@ -103,54 +100,6 @@ module.exports = [
     plugins: [
       ...base.plugins,
       new StatsWriterPlugin({ filename: 'server-stats.json' }),
-    ],
-  }, {
-    ...base,
-
-    name: 'functions',
-    target: 'node',
-
-    entry: {
-      functions: absolutePath('functions/index.ts')
-    },
-
-    output: {
-      ...base.output,
-      filename: 'index.js',
-      path: absolutePath('dist/functions'),
-      libraryTarget: 'commonjs2',
-    },
-
-    externals: [nodeExternals()],
-
-    plugins: [
-      ...base.plugins,
-      new StatsWriterPlugin({ filename: 'functions-stats.json' }),
-      // {
-      //   apply(compiler) {
-      //     compiler.hooks.done.tapPromise('FunctionPackage', async (stats) => {
-      //       const {
-      //         name,
-      //         version,
-      //         private,
-      //         dependencies,
-      //       } = require('./package.json')
-      //       const functionPackage = {
-      //         name,
-      //         version,
-      //         private,
-      //         dependencies,
-      //         engines: { node: 10 },
-      //       }
-      //       await writeFile(
-      //         absolutePath('functions/dist/package.json'),
-      //         JSON.stringify(functionPackage),
-      //         'utf-8',
-      //       )
-
-      //     });
-      //   }
-      // }
     ],
   }
 ]

@@ -2,8 +2,12 @@
   "name": "firebase-ssr",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "10"
+  },
   "scripts": {
-    "build": "webpack && cp package* dist/functions && cd dist/functions && npm i"
+    "build-ui": "webpack",
+    "build-functions": "tsc && cp package* dist && cd dist && npm i"
   },
   "dependencies": {
     "@reach/router": "^1.2.1",

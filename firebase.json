@@ -1,6 +1,6 @@
 {
   "functions": {
-    "source": "functions/dist",
+    "source": "dist",
     "predeploy": [
       "npm run build"
     ]

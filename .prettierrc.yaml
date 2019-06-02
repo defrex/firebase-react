@@ -4,3 +4,4 @@ jsxSingleQuote: true
 trailingComma: all
 arrowParens: always
 parser: typescript
+printWidth: 100

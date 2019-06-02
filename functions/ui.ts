@@ -3,6 +3,8 @@ import express from 'express'
 import morgan from 'morgan'
 import { resolve } from 'path'
 
+console.log('functions/ui')
+
 function absolutePath(path: string) {
   return resolve(`${__dirname}/../${path}`)
 }
@@ -13,6 +15,7 @@ const config = {
 }
 
 export default async function ui() {
+  console.log('functions/ui init')
   const app = express()
 
   app.use(morgan(config.environment === 'development' ? 'dev' : 'common'))
@@ -25,7 +28,7 @@ export default async function ui() {
     const webpackDevMiddleware = require('webpack-dev-middleware')
     const webpackHotMiddleware = require('webpack-hot-middleware')
     const webpackHotServerMiddleware = require('webpack-hot-server-middleware')
-    const webpackConfigs = require(absolutePath('webpack.config'))
+    const webpackConfigs = require(absolutePath('webpack.config.js'))
 
     const compiler = webpack(webpackConfigs)
     app.use(
@@ -55,6 +58,7 @@ export default async function ui() {
         ? `/dist/${serverStats.assetsByChunkName.server}`
         : `/dist/${serverStats.assetsByChunkName.server[0]}`,
     )
+    console.log(serverRendererPath)
     const serverRenderer = require(serverRendererPath).default
 
     app.get('*', serverRenderer({ clientStats }))
