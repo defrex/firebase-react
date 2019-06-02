@@ -3,10 +3,8 @@ import express from 'express'
 import morgan from 'morgan'
 import { resolve } from 'path'
 
-console.log('functions/ui')
-
 function absolutePath(path: string) {
-  return resolve(`${__dirname}/../${path}`)
+  return resolve(`${__dirname}/../../${path}`)
 }
 
 const config = {
@@ -15,14 +13,13 @@ const config = {
 }
 
 export default async function ui() {
-  console.log('functions/ui init')
   const app = express()
 
   app.use(morgan(config.environment === 'development' ? 'dev' : 'common'))
   app.use(cookieParser())
 
   if (config.environment === 'development') {
-    app.use(express.static(absolutePath('/public')))
+    app.use(express.static(absolutePath('dist/public')))
 
     const webpack = require('webpack')
     const webpackDevMiddleware = require('webpack-dev-middleware')
@@ -50,18 +47,20 @@ export default async function ui() {
 
     app.get('*', webpackHotServerMiddleware(compiler, { chunkName: 'server' }))
   } else {
-    const serverStats = require(absolutePath('dist/functions-stats.json'))
-    const clientStats = require(absolutePath('public/dist/client-stats.json'))
+    const serverStats = require(absolutePath('dist/ui/server-stats.json'))
+    const clientStats = require(absolutePath('dist/public/client-stats.json'))
 
-    const serverRendererPath = absolutePath(
-      typeof serverStats.assetsByChunkName.server === 'string'
-        ? `/dist/${serverStats.assetsByChunkName.server}`
-        : `/dist/${serverStats.assetsByChunkName.server[0]}`,
+    const uiServerPath = absolutePath(
+      `dist/ui/${
+        typeof serverStats.assetsByChunkName.server === 'string'
+          ? serverStats.assetsByChunkName.server
+          : serverStats.assetsByChunkName.server[0]
+      }`,
     )
-    console.log(serverRendererPath)
-    const serverRenderer = require(serverRendererPath).default
+    console.log('uiServerPath', uiServerPath)
+    const uiServer = require(uiServerPath).default
 
-    app.get('*', serverRenderer({ clientStats }))
+    app.get('*', uiServer({ clientStats }))
   }
 
   return app

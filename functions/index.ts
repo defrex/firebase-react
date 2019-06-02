@@ -1,7 +1,8 @@
 import { https } from 'firebase-functions'
-// import uiHandler from 'functions/ui'
+import uiHandler from './ui'
 
-console.log('functions/index postimport')
-export const ui = https.onRequest((req, res) => {
+export const hello = https.onRequest((req, res) => {
   res.send('Hello Functions')
 })
+
+export const ui = https.onRequest(uiHandler)

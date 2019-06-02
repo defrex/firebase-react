@@ -72,7 +72,7 @@ module.exports = [
 
     output: {
       ...base.output,
-      path: absolutePath('public/dist'),
+      path: absolutePath('dist/public'),
     },
 
     plugins: [

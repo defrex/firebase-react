@@ -9,16 +9,10 @@ interface Stats {
   assetsByChunkName: (string | string[])[]
 }
 
-export default function getServerRenderer({
-  clientStats,
-}: {
-  clientStats: Stats
-}) {
-  return async function serverRenderer(
-    req: Request,
-    res: Response,
-    _next: NextFunction,
-  ) {
+export default function getServer({ clientStats }: { clientStats: Stats }) {
+  console.log('getServer')
+  return function server(req: Request, res: Response, _next: NextFunction) {
+    console.log('server start')
     let html = ''
     try {
       html = renderToString(
@@ -34,20 +28,15 @@ export default function getServerRenderer({
       }
     }
 
-    const scripts: Script[] = Object.values(clientStats.assetsByChunkName).map(
-      (asset) => {
-        if (typeof asset !== 'string') {
-          asset = asset[0]
-        }
-        return { src: `/dist/${asset}` }
-      },
-    )
+    const scripts: Script[] = Object.values(clientStats.assetsByChunkName).map((asset) => {
+      if (typeof asset !== 'string') {
+        asset = asset[0]
+      }
+      return { src: `/dist/${asset}` }
+    })
 
-    res.send(
-      ReactDOMServer.renderToStaticMarkup(
-        <Document html={html} scripts={scripts} />,
-      ),
-    )
+    res.send(ReactDOMServer.renderToStaticMarkup(<Document html={html} scripts={scripts} />))
     res.end()
+    console.log('server end')
   }
 }
