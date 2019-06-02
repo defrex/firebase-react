@@ -10,7 +10,7 @@ render(ReactDOM.hydrate, AppComponent)
 
 const hot = (module as any).hot
 if (hot && hot.accept) {
-  hot.accept('ui/App', () => {
+  hot.accept(() => {
     render(ReactDOM.render, require('ui/App').App)
   })
 }

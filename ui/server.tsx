@@ -5,10 +5,6 @@ import { renderToString } from 'react-dom/server'
 import { App } from 'ui/App'
 import { Document } from 'ui/Document'
 
-interface Stats {
-  assetsByChunkName: (string | string[])[]
-}
-
 export default function(req: Request, res: Response) {
   let html = ''
   try {

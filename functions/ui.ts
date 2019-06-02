@@ -1,7 +1,6 @@
 import chokidar from 'chokidar'
 import { Request, Response } from 'express'
 import fs from 'fs'
-import ora from 'ora'
 import { resolve } from 'path'
 import requireFromString from 'require-from-string'
 import { promisify } from 'util'
@@ -28,16 +27,9 @@ export async function hotUiServer() {
         awaitWriteFinish: { stabilityThreshold: 100 },
       })
       .on('all', async () => {
-        const spinner = ora('Updating ServerUi ')
-        spinner.start()
-        try {
-          uiServer = await getUiServer()
-        } catch (e) {
-          spinner.fail()
-          console.error(e)
-          return
-        }
-        spinner.succeed()
+        process.stdout.write('Reloading UI Server...')
+        uiServer = await getUiServer()
+        process.stdout.write('✅\n')
       })
 
   return (req: Request, res: Response) => uiServer(req, res)
