@@ -1,4 +1,5 @@
 import React from 'react'
+import { NormalizedCacheObject } from 'apollo-boost'
 
 export interface Script {
   src?: string
@@ -9,9 +10,10 @@ interface DocumentProps {
   html: string
   scripts?: Script[]
   css?: string
+  state: NormalizedCacheObject
 }
 
-export function Document({ html, css, scripts }: DocumentProps) {
+export function Document({ html, css, scripts, state }: DocumentProps) {
   return (
     <html lang='en-US'>
       <head>
@@ -29,7 +31,12 @@ export function Document({ html, css, scripts }: DocumentProps) {
               dangerouslySetInnerHTML={content ? { __html: content } : undefined}
             />
           ))}
-        <script src={'/ui.js'} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__APOLLO_STATE__=${JSON.stringify(state).replace(/</g, '\\u003c')};`,
+          }}
+        />
+        <script src={'/ui.js'} async />
       </body>
     </html>
   )
