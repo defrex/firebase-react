@@ -1,3 +1,4 @@
+import 'isomorphic-unfetch'
 import chokidar from 'chokidar'
 import { Request, Response } from 'express'
 import fs from 'fs'

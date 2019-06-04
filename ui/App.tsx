@@ -12,6 +12,9 @@ export function App() {
         <li>
           <Link to='/example'>Example</Link>
         </li>
+        <li>
+        <Link to='/query'>Query</Link>
+      </li>
       </ul>
       <Routes />
     </div>
