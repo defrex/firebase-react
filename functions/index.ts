@@ -1,6 +1,6 @@
 import { https } from 'firebase-functions'
 import { hotUiServer } from './ui'
-import { APIServer } from './api'
+import { apiServer } from './api'
 
 export const hello = https.onRequest((req, res) => {
   res.send('Hello Functions')
@@ -12,4 +12,4 @@ export const ui = https.onRequest(async (req, res) => {
   return uiServer(req, res)
 })
 
-export const api = https.onRequest(APIServer)
+export const api = https.onRequest(apiServer)

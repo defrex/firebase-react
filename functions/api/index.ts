@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { ApolloServer } from 'apollo-server-cloud-functions'
 import { buildSchema } from 'type-graphql'
-import { HelloWorldResolver } from './GraphQL/resolvers'
+import { HelloWorldResolver } from './resolvers'
 
-export const APIServer = async (req: Request, res: Response) => {
+export const apiServer = async (req: Request, res: Response) => {
   const schema = await buildSchema({
     resolvers: [HelloWorldResolver],
   })
