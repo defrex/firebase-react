@@ -8,7 +8,8 @@
   "main": "functions/index.js",
   "scripts": {
     "build": "./bin/build.sh",
-    "watch": "./bin/watch.sh"
+    "watch": "./bin/watch.sh",
+    "lint": "eslint --ext=ts,tsx ."
   },
   "alias": {
     "ui": "./ui",
