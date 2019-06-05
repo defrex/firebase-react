@@ -37,5 +37,6 @@ export async function hotUiServer() {
         process.stdout.write('✅\n')
       })
 
-  return (req: Request, res: Response) => uiServer(req, res, mapValues(config() || {}, camelCase))
+  return (req: Request, res: Response) =>
+    uiServer(req, res, mapValues(config().ui || {}, camelCase))
 }
