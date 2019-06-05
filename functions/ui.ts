@@ -2,6 +2,8 @@ import chokidar from 'chokidar'
 import { Request, Response } from 'express'
 import { config } from 'firebase-functions'
 import fs from 'fs'
+import camelCase from 'lodash/camelCase'
+import mapValues from 'lodash/mapValues'
 import { resolve } from 'path'
 import requireFromString from 'require-from-string'
 import { promisify } from 'util'
@@ -21,9 +23,6 @@ async function getUiServer() {
 export async function hotUiServer() {
   let uiServer = await getUiServer()
 
-  console.log('config()', config())
-  console.log('config().ui', config().ui)
-
   if (process.env.NODE_ENV === 'development')
     chokidar
       .watch(serverFilename, {
@@ -37,7 +36,5 @@ export async function hotUiServer() {
       })
 
   return (req: Request, res: Response) =>
-    uiServer(req, res, {
-      baseUrl: config().ui.baseurl,
-    })
+    uiServer(req, res, mapValues(config().ui || {}, camelCase))
 }
