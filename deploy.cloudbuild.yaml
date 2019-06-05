@@ -1,0 +1,12 @@
+steps:
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+  - name: 'gcr.io/$PROJECT_ID/firebase-tools'
+    args: [ 'deploy', '-P', '$PROJECT_ID']
+    secretEnv: ['FIREBASE_TOKEN']
+secrets:
+- kmsKeyName: 'projects/reflex-236915/locations/global/keyRings/firebase/cryptoKeys/ci-token'
+  secretEnv:
+    FIREBASE_TOKEN: CiQAzA8wIw+3mPjWdIZj10qalCyH8WJ7LSB99g4249Myd79/34cSVgCBrx5ghmPBWUpzY2gq7UztwE4keUbID5fpVl3B8EDg9K0E2KORYGpPhzas7REwrC+kza0gm+PAJfj3d8vNjwbmTHt2ZFoCUe6iwArQm3RRJCEAlyDP
