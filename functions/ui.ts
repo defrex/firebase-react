@@ -1,5 +1,6 @@
 import chokidar from 'chokidar'
 import { Request, Response } from 'express'
+import { config } from 'firebase-functions'
 import fs from 'fs'
 import { resolve } from 'path'
 import requireFromString from 'require-from-string'
@@ -20,6 +21,9 @@ async function getUiServer() {
 export async function hotUiServer() {
   let uiServer = await getUiServer()
 
+  console.log('config()', config())
+  console.log('config().ui', config().ui)
+
   if (process.env.NODE_ENV === 'development')
     chokidar
       .watch(serverFilename, {
@@ -32,5 +36,8 @@ export async function hotUiServer() {
         process.stdout.write('✅\n')
       })
 
-  return (req: Request, res: Response) => uiServer(req, res)
+  return (req: Request, res: Response) =>
+    uiServer(req, res, {
+      baseUrl: config().ui.baseurl,
+    })
 }

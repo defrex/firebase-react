@@ -3,14 +3,17 @@ import { Request, Response } from 'express'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { App } from 'ui/App'
+import { Config, ConfigProvider } from 'ui/components/ConfigProvider'
 import { Document } from 'ui/Document'
 
-export default function(req: Request, res: Response) {
+export default function(req: Request, res: Response, config: Config) {
   let html = ''
   try {
     html = renderToString(
       <ServerLocation url={req.url}>
-        <App />
+        <ConfigProvider baseUrl={config.baseUrl}>
+          <App />
+        </ConfigProvider>
       </ServerLocation>,
     )
   } catch (error) {
