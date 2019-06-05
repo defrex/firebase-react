@@ -11,7 +11,7 @@ export default function(req: Request, res: Response, config: Config) {
   try {
     html = renderToString(
       <ServerLocation url={req.url}>
-        <ConfigProvider baseUrl={config.baseUrl}>
+        <ConfigProvider {...config}>
           <App />
         </ConfigProvider>
       </ServerLocation>,
