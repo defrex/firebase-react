@@ -1,6 +1,9 @@
 import chokidar from 'chokidar'
 import { Request, Response } from 'express'
+import { config } from 'firebase-functions'
 import fs from 'fs'
+import camelCase from 'lodash/camelCase'
+import mapKeys from 'lodash/mapKeys'
 import { resolve } from 'path'
 import requireFromString from 'require-from-string'
 import { promisify } from 'util'
@@ -32,5 +35,6 @@ export async function hotUiServer() {
         process.stdout.write('✅\n')
       })
 
-  return (req: Request, res: Response) => uiServer(req, res)
+  return (req: Request, res: Response) =>
+    uiServer(req, res, mapKeys(config().ui || {}, (value, key) => camelCase(key)))
 }

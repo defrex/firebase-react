@@ -1,8 +1,10 @@
 import { Link } from '@reach/router'
 import React from 'react'
+import { useConfig } from 'ui/components/ConfigProvider'
 import { Routes } from 'ui/routes'
 
 export function App() {
+  const { baseUrl } = useConfig()
   return (
     <div>
       <ul>
@@ -13,6 +15,7 @@ export function App() {
           <Link to='/example'>Example</Link>
         </li>
       </ul>
+      <h3>{baseUrl}</h3>
       <Routes />
     </div>
   )

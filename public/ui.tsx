@@ -1,9 +1,15 @@
 import React from 'react'
 import ReactDOM, { Renderer } from 'react-dom'
 import { App as AppComponent } from 'ui/App'
+import { ConfigProvider } from 'ui/components/ConfigProvider'
 
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
-  renderFunction(<App />, document.getElementById('app'))
+  renderFunction(
+    <ConfigProvider baseUrl={document.location.origin}>
+      <App />
+    </ConfigProvider>,
+    document.getElementById('app'),
+  )
 }
 
 render(ReactDOM.hydrate, AppComponent)
