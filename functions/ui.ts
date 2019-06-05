@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { config } from 'firebase-functions'
 import fs from 'fs'
 import camelCase from 'lodash/camelCase'
-import mapValues from 'lodash/mapValues'
+import mapKeys from 'lodash/mapKeys'
 import { resolve } from 'path'
 import requireFromString from 'require-from-string'
 import { promisify } from 'util'
@@ -19,8 +19,6 @@ async function getUiServer() {
   const content = await readFile(serverFilename, 'utf-8')
   return defaultImport(requireFromString(content, serverFilename))
 }
-
-console.log('config()', config())
 
 export async function hotUiServer() {
   let uiServer = await getUiServer()
@@ -38,5 +36,5 @@ export async function hotUiServer() {
       })
 
   return (req: Request, res: Response) =>
-    uiServer(req, res, mapValues(config().ui || {}, camelCase))
+    uiServer(req, res, mapKeys(config().ui || {}, (value, key) => camelCase(key)))
 }
