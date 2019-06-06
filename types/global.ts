@@ -2,7 +2,7 @@ import { AppState } from 'ui/Document'
 
 declare global {
   interface Window {
-    FB_STATE: AppState
+    APP_STATE: AppState
   }
   /* eslint-disable @typescript-eslint/no-namespace */
   namespace NodeJS {

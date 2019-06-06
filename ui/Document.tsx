@@ -39,7 +39,7 @@ export function Document({ html, css, scripts, state }: DocumentProps) {
           ))}
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.FB_STATE = { APOLLO_STATE:${JSON.stringify(state.APOLLO_STATE).replace(
+            __html: `window.APP_STATE = { APOLLO_STATE:${JSON.stringify(state.APOLLO_STATE).replace(
               /</g,
               '\\u003c',
             )}, CONFIG: ${JSON.stringify(state.CONFIG)} };`,
