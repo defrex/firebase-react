@@ -7,7 +7,7 @@
   },
   "main": "functions/index.js",
   "scripts": {
-    "build": "./bin/build.sh",
+    "build": "ts-node bin/build.ts",
     "watch": "./bin/watch.sh",
     "dev": "firebase serve",
     "lint": "eslint --ext=ts,tsx ."
@@ -31,10 +31,12 @@
     "firebase-functions": "^2.3.1",
     "firebase-functions-test": "^0.1.6",
     "firebase-tools": "^6.10.0",
+    "fs-extra": "^8.0.1",
     "graphql": "^14.3.1",
     "grpc": "^1.21.1",
     "isomorphic-unfetch": "^3.0.0",
     "morgan": "^1.9.1",
+    "node-typescript-compiler": "^2.0.0",
     "ora": "^3.4.0",
     "react": "^16.8.6",
     "react-apollo-hooks": "^0.4.5",
@@ -46,9 +48,11 @@
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.1",
+    "@types/fs-extra": "^7.0.0",
     "@types/graphql": "^14.2.0",
     "@types/morgan": "^1.7.35",
     "@types/ora": "^3.2.0",
+    "@types/parcel-bundler": "^1.12.0",
     "@types/reach__router": "^1.2.4",
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
@@ -69,6 +73,8 @@
     "file-loader": "^3.0.1",
     "parcel-bundler": "^1.12.3",
     "prettier": "^1.17.1",
-    "typescript": "^3.5.1"
+    "ts-node": "^8.2.0",
+    "typescript": "^3.5.1",
+    "workbox-build": "^4.3.1"
   }
 }

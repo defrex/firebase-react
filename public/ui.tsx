@@ -6,6 +6,12 @@ import { initApollo } from 'ui/lib/initApollo'
 import { ApolloProvider } from 'react-apollo-hooks';
 
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
+  if ('serviceWorker' in navigator) {
+    const swName = `/service-worker.js`
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register(swName);
+    });
+  }
   renderFunction(
     <ConfigProvider {...window.APP_STATE.CONFIG}>
       <ApolloProvider
