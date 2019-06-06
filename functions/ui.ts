@@ -1,9 +1,8 @@
+import 'isomorphic-unfetch'
 import chokidar from 'chokidar'
 import { Request, Response } from 'express'
 import { config } from 'firebase-functions'
 import fs from 'fs'
-import camelCase from 'lodash/camelCase'
-import mapKeys from 'lodash/mapKeys'
 import { resolve } from 'path'
 import requireFromString from 'require-from-string'
 import { promisify } from 'util'
@@ -36,5 +35,11 @@ export async function hotUiServer() {
       })
 
   return (req: Request, res: Response) =>
-    uiServer(req, res, mapKeys(config().ui || {}, (value, key) => camelCase(key)))
+    uiServer(
+      req,
+      res,
+      ...Object.entries(config().ui || {}).map(([a, b]) => ({
+        [a.replace(/_(\D)/, (a, b) => b.toUpperCase())]: b,
+      })),
+    )
 }

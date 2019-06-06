@@ -2,11 +2,14 @@ import React from 'react'
 import ReactDOM, { Renderer } from 'react-dom'
 import { App as AppComponent } from 'ui/App'
 import { ConfigProvider } from 'ui/components/ConfigProvider'
+import { ApolloProvider } from 'ui/components/ApolloProvider'
 
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
   renderFunction(
-    <ConfigProvider baseUrl={document.location.origin}>
-      <App />
+    <ConfigProvider {...window.FB_STATE.CONFIG}>
+      <ApolloProvider>
+        <App />
+      </ApolloProvider>
     </ConfigProvider>,
     document.getElementById('app'),
   )
