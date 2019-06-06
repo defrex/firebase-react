@@ -9,11 +9,11 @@ import { Document } from 'ui/Document'
 import { initApollo } from 'ui/lib/initApollo'
 export default async function(req: Request, res: Response, config: Config) {
   let html = ''
-  const stuf = '../public/assets.json'
-  const scripts = Object.entries(((await import(stuf)).default) as { client: string }).map(([, src]) => ({
+  const assetPaths = '../public/assets.json'
+  const routes = (await import(assetPaths)).default as { client: string }
+  const scripts = Object.entries(routes).map(([, src]) => ({
     src,
   }))
-  console.log(scripts)
   const client = initApollo({ baseUrl: config.baseUrl })
 
   try {

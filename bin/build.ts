@@ -39,10 +39,10 @@ async function BuildUI() {
       },
     ],
   })
-  const JSBundler = new ParcelBundler(['public/assets.urls'], JSOptions)
-  const UIBundler = new ParcelBundler(['ui/server.tsx'], options)
-  await JSBundler.bundle()
-  await UIBundler.bundle()
+  const ClientBundler = new ParcelBundler(['public/assets.urls'], JSOptions)
+  const ServerBundler = new ParcelBundler(['ui/server.tsx'], options)
+  await ClientBundler.bundle()
+  await ServerBundler.bundle()
 }
 
 BuildUI()
