@@ -41,7 +41,8 @@ async function BuildUI() {
   })
   const JSBundler = new ParcelBundler(['public/assets.urls'], JSOptions)
   const UIBundler = new ParcelBundler(['ui/server.tsx'], options)
-  await Promise.all([JSBundler.bundle(), UIBundler.bundle()])
+  await JSBundler.bundle()
+  await UIBundler.bundle()
 }
 
 BuildUI()
