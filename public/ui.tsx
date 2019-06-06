@@ -2,11 +2,20 @@ import React from 'react'
 import ReactDOM, { Renderer } from 'react-dom'
 import { App as AppComponent } from 'ui/App'
 import { ConfigProvider } from 'ui/components/ConfigProvider'
+import { initApollo } from 'ui/lib/initApollo'
+import { ApolloProvider } from 'react-apollo-hooks';
 
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
   renderFunction(
-    <ConfigProvider baseUrl={document.location.origin}>
-      <App />
+    <ConfigProvider {...window.APP_STATE.CONFIG}>
+      <ApolloProvider
+        client={initApollo({
+          baseUrl: window.APP_STATE.CONFIG.baseUrl,
+          initialState: window.APP_STATE.APOLLO_STATE,
+        })}
+      >
+        <App />
+      </ApolloProvider>
     </ConfigProvider>,
     document.getElementById('app'),
   )

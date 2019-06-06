@@ -8,6 +8,8 @@ export const apiServer = async (req: Request, res: Response) => {
     resolvers: [HelloWorldResolver],
   })
 
+  if (req.url === '/api') req.url = '/'
+
   const apolloServer = new ApolloServer({
     schema,
     introspection: true,
