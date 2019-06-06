@@ -7,10 +7,13 @@ import { App } from 'ui/App'
 import { Config, ConfigProvider } from 'ui/components/ConfigProvider'
 import { Document } from 'ui/Document'
 import { initApollo } from 'ui/lib/initApollo'
-
 export default async function(req: Request, res: Response, config: Config) {
   let html = ''
-
+  const stuf = '../public/assets.json'
+  const scripts = Object.entries(((await import(stuf)).default) as { client: string }).map(([, src]) => ({
+    src,
+  }))
+  console.log(scripts)
   const client = initApollo({ baseUrl: config.baseUrl })
 
   try {
@@ -37,7 +40,7 @@ export default async function(req: Request, res: Response, config: Config) {
   const state = client.cache.extract()
 
   const document = renderToString(
-    <Document html={html} state={{ APOLLO_STATE: state, CONFIG: config }} />,
+    <Document html={html} state={{ APOLLO_STATE: state, CONFIG: config }} scripts={scripts} />,
   )
   res.status(200).send(document)
 }

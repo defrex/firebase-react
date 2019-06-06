@@ -29,14 +29,6 @@ export function Document({ html, css, scripts, state }: DocumentProps) {
       <body>
         <div id='app' dangerouslySetInnerHTML={{ __html: html }} />
 
-        {scripts &&
-          scripts.map(({ src, content }, index) => (
-            <script
-              key={index}
-              src={src}
-              dangerouslySetInnerHTML={content ? { __html: content } : undefined}
-            />
-          ))}
         <script
           dangerouslySetInnerHTML={{
             __html: `window.APP_STATE = { APOLLO_STATE:${JSON.stringify(state.APOLLO_STATE).replace(
@@ -45,7 +37,15 @@ export function Document({ html, css, scripts, state }: DocumentProps) {
             )}, CONFIG: ${JSON.stringify(state.CONFIG)} };`,
           }}
         />
-        <script src={'/ui.js'} />
+        {scripts &&
+          scripts.map(({ src, content }, index) => (
+            <script
+              key={index}
+              src={src}
+              dangerouslySetInnerHTML={content ? { __html: content } : undefined}
+              async
+            />
+          ))}
       </body>
     </html>
   )

@@ -6,9 +6,16 @@ const exec = util.promisify(require('child_process').exec)
 
 async function BuildUI() {
   const options: ParcelOptions = {
-    outDir: 'dist/',
+    outDir: 'dist/ui',
     minify: true,
     watch: false,
+    contentHash: true
+  }
+  const JSOptions: ParcelOptions = {
+    outDir: 'dist/public',
+    minify: true,
+    watch: false,
+    contentHash: false
   }
 
   await remove('dist/')
@@ -32,8 +39,9 @@ async function BuildUI() {
       },
     ],
   })
-  const bundler = new ParcelBundler(['public/ui.tsx', 'ui/server.tsx'], options)
-  await bundler.bundle()
+  const JSBundler = new ParcelBundler(['public/assets.urls'], JSOptions)
+  const UIBundler = new ParcelBundler(['ui/server.tsx'], options)
+  await Promise.all([JSBundler.bundle(), UIBundler.bundle()])
 }
 
 BuildUI()

@@ -38,6 +38,7 @@
     "morgan": "^1.9.1",
     "node-typescript-compiler": "^2.0.0",
     "ora": "^3.4.0",
+    "parcel-plugin-assets-list": "^1.7.1",
     "react": "^16.8.6",
     "react-apollo-hooks": "^0.4.5",
     "react-dom": "^16.8.6",
