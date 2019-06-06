@@ -29,7 +29,6 @@ export function Document({ html, css, scripts }: DocumentProps) {
               dangerouslySetInnerHTML={content ? { __html: content } : undefined}
             />
           ))}
-        <script src={'/ui.js'} />
       </body>
     </html>
   )
