@@ -9,13 +9,13 @@ async function BuildUI() {
     outDir: 'dist/ui/',
     minify: true,
     watch: true,
-    contentHash: true
+    contentHash: true,
   }
   const JSOptions: ParcelOptions = {
     outDir: 'dist/public',
     minify: true,
     watch: true,
-    contentHash: false
+    contentHash: true,
   }
 
   await remove('dist/')
