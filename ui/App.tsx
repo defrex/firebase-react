@@ -9,7 +9,7 @@ export function App() {
     <div>
       <ul>
         <li>
-          <Link to='/home'>Home</Link>
+          <Link to='/'>Index</Link>
         </li>
         <li>
           <Link to='/example'>Example</Link>

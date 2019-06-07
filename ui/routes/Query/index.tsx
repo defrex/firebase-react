@@ -1,16 +1,10 @@
 import { RouteComponentProps } from '@reach/router'
 import React from 'react'
 import { useQuery } from 'react-apollo-hooks'
-import gql from 'graphql-tag'
-
-const helloWorldGQL = gql`
-  {
-    helloWorld
-  }
-`
+import gql from './query.graphql'
 
 export function QueryRoute(props: RouteComponentProps) {
-  const { data, loading } = useQuery<{ helloWorld: string }>(helloWorldGQL)
+  const { data, loading } = useQuery<{ helloWorld: string }>(gql)
   if (loading) return <div>Loading</div>
   return (
     <div>

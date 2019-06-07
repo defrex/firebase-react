@@ -7,7 +7,7 @@ import { QueryRoute } from 'ui/routes/Query'
 export function Routes() {
   return (
     <Router>
-      <HomeRoute path='/home' />
+      <HomeRoute path='/' />
       <ExampleRoute path='/example' />
       <QueryRoute path='/query' />
     </Router>

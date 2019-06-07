@@ -6,10 +6,17 @@ import { initApollo } from 'ui/lib/initApollo'
 import { ApolloProvider } from 'react-apollo-hooks';
 
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
+  const serviceWKPath = '/service-worker.js'
   if ('serviceWorker' in navigator) {
-    const swName = `/service-worker.js`
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register(swName);
+      navigator.serviceWorker
+        .register(serviceWKPath, {scope: '/'})
+        .then(function(registration) {
+          console.log('SW registered: ', registration);
+        })
+        .catch(function(registrationError) {
+          console.log('SW registration failed: ', registrationError);
+        });
     });
   }
   renderFunction(

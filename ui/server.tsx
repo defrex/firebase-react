@@ -42,5 +42,5 @@ export default async function(req: Request, res: Response, config: Config) {
   const document = renderToString(
     <Document html={html} state={{ APOLLO_STATE: state, CONFIG: config }} scripts={scripts} />,
   )
-  res.status(200).send(document)
+  res.status(200).send(`<!DOCTYPE html>${document}`)
 }
