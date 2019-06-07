@@ -24,19 +24,14 @@ export function Document({ html, css, scripts, state }: DocumentProps) {
     <html lang='en-US'>
       <head>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='manifest' href='/manifest.json' />
+        {scripts &&
+          scripts.map(({ src }, index) => src && <link rel='preload' href={src} as='script' />)}
         {css ? <style id='styles'>{css}</style> : null}
       </head>
       <body>
         <div id='app' dangerouslySetInnerHTML={{ __html: html }} />
 
-        {scripts &&
-          scripts.map(({ src, content }, index) => (
-            <script
-              key={index}
-              src={src}
-              dangerouslySetInnerHTML={content ? { __html: content } : undefined}
-            />
-          ))}
         <script
           dangerouslySetInnerHTML={{
             __html: `window.APP_STATE = { APOLLO_STATE:${JSON.stringify(state.APOLLO_STATE).replace(
@@ -45,7 +40,15 @@ export function Document({ html, css, scripts, state }: DocumentProps) {
             )}, CONFIG: ${JSON.stringify(state.CONFIG)} };`,
           }}
         />
-        <script src={'/ui.js'} />
+        {scripts &&
+          scripts.map(({ src, content }, index) => (
+            <script
+              key={index}
+              src={src}
+              dangerouslySetInnerHTML={content ? { __html: content } : undefined}
+              async
+            />
+          ))}
       </body>
     </html>
   )
