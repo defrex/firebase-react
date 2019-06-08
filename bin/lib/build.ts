@@ -10,8 +10,7 @@ export async function build(watch: boolean = false) {
   await copy('package.json', 'dist/package.json')
   await copy('package-lock.json', 'dist/package-lock.json')
 
-  const tsc = run(`tsc ${watch ? '--watch' : '--build'} functions/tsconfig.json`)
-  if (!watch) await tsc
+  await run('tsc --build functions/tsconfig.json')
 
   const bundler = new ParcelBundler(['ui/server.tsx', 'ui/client.urls', 'ui/manifest.json'], {
     outDir: 'dist/public',
