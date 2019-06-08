@@ -7,12 +7,10 @@
   },
   "hosting": {
     "public": "dist/public",
-    "rewrites": [
-      {
+    "rewrites": [{
       "source": "/api",
       "function": "api"
-      },
-      {
+    }, {
       "source": "**",
       "function": "ui"
     }]

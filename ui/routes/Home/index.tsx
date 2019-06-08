@@ -9,7 +9,7 @@ export function HomeRoute(props: RouteComponentProps) {
   useDescription('Firebase React SSR Demo')
   return (
     <div>
-      <h1>Index</h1>
+      <h1>Home</h1>
     </div>
   )
 }

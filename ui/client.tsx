@@ -1,25 +1,19 @@
 import React from 'react'
+import { ApolloProvider } from 'react-apollo-hooks'
 import ReactDOM, { Renderer } from 'react-dom'
 import { App as AppComponent } from 'ui/App'
 import { ConfigProvider } from 'ui/components/ConfigProvider'
 import { initApollo } from 'ui/lib/initApollo'
-import { ApolloProvider } from 'react-apollo-hooks'
 import { HeadProvider } from './components/HeadProvider'
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async function() {
+    const worker = await navigator.serviceWorker.register('/service-worker.ts', { scope: '/' })
+    console.log('SW registered: ', worker)
+  })
+}
+
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
-  const serviceWKPath = '/service-worker.js'
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker
-        .register(serviceWKPath, { scope: '/' })
-        .then(function(registration) {
-          console.log('SW registered: ', registration)
-        })
-        .catch(function(registrationError) {
-          console.log('SW registration failed: ', registrationError)
-        })
-    })
-  }
   renderFunction(
     <HeadProvider tags={[]}>
       <ConfigProvider {...window.APP_STATE.CONFIG}>

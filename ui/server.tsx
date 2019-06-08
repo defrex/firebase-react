@@ -1,27 +1,28 @@
 import { isRedirect, ServerLocation } from '@reach/router'
 import { Request, Response } from 'express'
 import React from 'react'
+import { ApolloProvider, getMarkupFromTree } from 'react-apollo-hooks'
 import { renderToString } from 'react-dom/server'
-import { getMarkupFromTree, ApolloProvider } from 'react-apollo-hooks'
 import { App } from 'ui/App'
 import { Config, ConfigProvider } from 'ui/components/ConfigProvider'
+import { HeadProvider, resetTagID } from 'ui/components/HeadProvider'
 import { Document } from 'ui/Document'
 import { initApollo } from 'ui/lib/initApollo'
-import { HeadProvider, resetTagID } from 'ui/components/HeadProvider'
 
 export default async function(req: Request, res: Response, config: Config) {
-  let html = ''
-  const assetPaths = '../public/assets.json'
-  const routes = (await import(assetPaths)).default as { client: string }
-  const scripts = Object.entries(routes).map(([, src]) => ({
-    src,
-  }))
+  const clientAssetsFile = './client.json'
+  const clientAssets = await import(clientAssetsFile)
+  const scripts = Object.values(clientAssets).filter(
+    (script) => typeof script === 'string',
+  ) as string[]
+
   const client = initApollo({ baseUrl: config.baseUrl })
 
   resetTagID()
 
   let head: JSX.Element[] = []
 
+  let html = ''
   try {
     html = await getMarkupFromTree({
       renderFunction: renderToString,
