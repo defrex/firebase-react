@@ -1,14 +1,14 @@
-import 'isomorphic-unfetch'
 import chokidar from 'chokidar'
 import { Request, Response } from 'express'
 import { config } from 'firebase-functions'
 import fs from 'fs'
+import 'isomorphic-unfetch'
 import { resolve } from 'path'
 import requireFromString from 'require-from-string'
 import { promisify } from 'util'
 
 const readFile = promisify(fs.readFile)
-const serverFilename = resolve(`${__dirname}/../ui/server.js`)
+const serverFilename = resolve(`${__dirname}/../public/server.js`)
 
 function defaultImport(obj: any) {
   return obj && obj.__esModule ? obj.default : obj
@@ -38,7 +38,7 @@ export async function hotUiServer() {
     uiServer(
       req,
       res,
-      ...Object.entries(config().ui || {}).map(([a, b]) => ({
+      ...Object.entries(config().ui).map(([a, b]) => ({
         [a.replace(/_(\D)/, (a, b) => b.toUpperCase())]: b,
       })),
     )
