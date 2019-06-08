@@ -5,6 +5,7 @@ import { ApolloProvider, getMarkupFromTree } from 'react-apollo-hooks'
 import { renderToString } from 'react-dom/server'
 import { App } from 'ui/App'
 import { Config, ConfigProvider } from 'ui/components/ConfigProvider'
+import { HeadProvider, resetTagID } from 'ui/components/HeadProvider'
 import { Document } from 'ui/Document'
 import { initApollo } from 'ui/lib/initApollo'
 
@@ -17,6 +18,10 @@ export default async function(req: Request, res: Response, config: Config) {
 
   const client = initApollo({ baseUrl: config.baseUrl })
 
+  resetTagID()
+
+  let head: JSX.Element[] = []
+
   let html = ''
   try {
     html = await getMarkupFromTree({
@@ -24,9 +29,11 @@ export default async function(req: Request, res: Response, config: Config) {
       tree: (
         <ServerLocation url={req.url}>
           <ConfigProvider {...config}>
-            <ApolloProvider client={client}>
-              <App />
-            </ApolloProvider>
+            <HeadProvider tags={head}>
+              <ApolloProvider client={client}>
+                <App />
+              </ApolloProvider>
+            </HeadProvider>
           </ConfigProvider>
         </ServerLocation>
       ),
@@ -42,7 +49,12 @@ export default async function(req: Request, res: Response, config: Config) {
   const state = client.cache.extract()
 
   const document = renderToString(
-    <Document html={html} state={{ APOLLO_STATE: state, CONFIG: config }} scripts={scripts} />,
+    <Document
+      html={html}
+      state={{ APOLLO_STATE: state, CONFIG: config }}
+      scripts={scripts}
+      head={head}
+    />,
   )
   res.status(200).send(`<!DOCTYPE html>${document}`)
 }

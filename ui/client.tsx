@@ -4,6 +4,7 @@ import ReactDOM, { Renderer } from 'react-dom'
 import { App as AppComponent } from 'ui/App'
 import { ConfigProvider } from 'ui/components/ConfigProvider'
 import { initApollo } from 'ui/lib/initApollo'
+import { HeadProvider } from './components/HeadProvider'
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async function() {
@@ -14,16 +15,18 @@ if ('serviceWorker' in navigator) {
 
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
   renderFunction(
-    <ConfigProvider {...window.APP_STATE.CONFIG}>
-      <ApolloProvider
-        client={initApollo({
-          baseUrl: window.APP_STATE.CONFIG.baseUrl,
-          initialState: window.APP_STATE.APOLLO_STATE,
-        })}
-      >
-        <App />
-      </ApolloProvider>
-    </ConfigProvider>,
+    <HeadProvider tags={[]}>
+      <ConfigProvider {...window.APP_STATE.CONFIG}>
+        <ApolloProvider
+          client={initApollo({
+            baseUrl: window.APP_STATE.CONFIG.baseUrl,
+            initialState: window.APP_STATE.APOLLO_STATE,
+          })}
+        >
+          <App />
+        </ApolloProvider>
+      </ConfigProvider>
+    </HeadProvider>,
     document.getElementById('app'),
   )
 }
