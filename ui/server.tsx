@@ -18,9 +18,7 @@ export default async function(req: Request, res: Response, config: Config) {
   }))
   const client = initApollo({ baseUrl: config.baseUrl })
 
-  let head: JSX.Element[] = [
-    <meta key='viewport' name='viewport' content='width=device-width, initial-scale=1' />,
-  ]
+  let head: JSX.Element[] = []
 
   try {
     html = await getMarkupFromTree({
@@ -50,8 +48,9 @@ export default async function(req: Request, res: Response, config: Config) {
   const document = renderToString(
     <Document
       html={html}
-      state={{ APOLLO_STATE: state, CONFIG: config, HEAD: head }}
+      state={{ APOLLO_STATE: state, CONFIG: config }}
       scripts={scripts}
+      head={head}
     />,
   )
   res.status(200).send(`<!DOCTYPE html>${document}`)

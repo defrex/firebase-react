@@ -21,7 +21,7 @@ async function render(renderFunction: Renderer, App: typeof AppComponent) {
     })
   }
   renderFunction(
-    <HeadProvider tags={...window.APP_STATE.HEAD}>
+    <HeadProvider tags={[]}>
       <ConfigProvider {...window.APP_STATE.CONFIG}>
         <ApolloProvider
           client={initApollo({

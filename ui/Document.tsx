@@ -10,7 +10,6 @@ export interface Script {
 export interface AppState {
   APOLLO_STATE: NormalizedCacheObject
   CONFIG: Config
-  HEAD: JSX.Element[]
 }
 
 interface DocumentProps {
@@ -18,14 +17,15 @@ interface DocumentProps {
   scripts?: Script[]
   css?: string
   state: AppState
+  head: JSX.Element[]
 }
 
-export function Document({ html, css, scripts, state }: DocumentProps) {
+export function Document({ html, css, scripts, state, head }: DocumentProps) {
   return (
     <html lang='en-US'>
       <head>
         <link rel='manifest' href='/manifest.json' />
-        {...state.HEAD}
+        {head}
         {scripts &&
           scripts.map(({ src }, index) => src && <link rel='preload' href={src} as='script' />)}
         {css ? <style id='styles'>{css}</style> : null}
@@ -38,7 +38,7 @@ export function Document({ html, css, scripts, state }: DocumentProps) {
             __html: `window.APP_STATE = { APOLLO_STATE:${JSON.stringify(state.APOLLO_STATE).replace(
               /</g,
               '\\u003c',
-            )}, CONFIG: ${JSON.stringify(state.CONFIG)}, HEAD: ${JSON.stringify(state.HEAD)} };`,
+            )}, CONFIG: ${JSON.stringify(state.CONFIG)} };`,
           }}
         />
         {scripts &&

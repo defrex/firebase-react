@@ -1,24 +1,29 @@
-import React, { useContext, createContext, ReactNode } from 'react'
+import React, { useContext, createContext, ReactNode, useState } from 'react'
 import { globalHistory } from '@reach/router'
 
 interface ScriptTagParams {
   type: 'script'
+  id: string
   script: string
   texttype: string
 }
 
 interface TitleTagParams {
   type: 'title'
+  id: string
   text: string
 }
 
 interface MetaTagParams {
   type: 'meta'
+  id: string
   name: 'description' | 'keywords' | 'author' | 'viewport'
   content: string
 }
 
 type TagParams = ScriptTagParams | TitleTagParams | MetaTagParams
+
+type NewTagParams = Omit<ScriptTagParams, 'id'> | Omit<TitleTagParams, 'id'> | Omit<MetaTagParams, 'id'>
 
 export interface Head {
   tags: JSX.Element[]
@@ -43,11 +48,19 @@ export function HeadProvider(props: HeadProviderProps) {
         document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
       )
 
+      const titleElements = Array.from(
+        document.getElementsByTagName('head')[0].getElementsByTagName('title'),
+      )
+
       const scriptElements = Array.from(
         document.getElementsByTagName('head')[0].getElementsByTagName('script'),
       )
 
       metaElements.map((itm) => {
+        if (itm.parentNode) itm.parentNode.removeChild(itm)
+      })
+
+      titleElements.map((itm) => {
         if (itm.parentNode) itm.parentNode.removeChild(itm)
       })
 
@@ -60,59 +73,56 @@ export function HeadProvider(props: HeadProviderProps) {
     <HeadContext.Provider
       value={{
         tags,
-        addTag: (params) => {
+        addTag: ({ id, ...params}) => {
           if (params.type === 'title') {
-            const current = tags.find((tag) => tag.type === 'title')
-            if (!current) tags.push(<title>{params.text}</title>)
-            else tags[tags.indexOf(current)] = <title>{params.text}</title>
-            if (
-              typeof window !== 'undefined' &&
-              document.getElementsByTagName('title')[0].text !== params.text
-            )
-              document.getElementsByTagName('title')[0].text = params.text
-          } else if (params.type === 'script') {
-            const current = tags.find(
-              (tag) => tag.type === 'script' && tag.type === params.texttype,
-            )
-            if (!current)
-              tags.push(
-                <script
-                  type={params.texttype}
-                  dangerouslySetInnerHTML={{ __html: params.script }}
-                />,
-              )
-
             if (typeof window !== 'undefined') {
-              const elements = Array.from(
-                document.getElementsByTagName('head')[0].getElementsByTagName('script'),
-              )
-
-              const current2 = elements.find((itm) => itm.type === params.texttype)
-              if (current2) return
-              const elem = document.createElement('script')
-              elem.type = params.texttype
-              elem.innerHTML = params.script
+              const currentElement = document.querySelector(`[data-id="${id}"]`) as HTMLTitleElement || undefined
+              if (currentElement) {
+                currentElement.remove()
+              }
+              
+              const elem = document.createElement('title')
+              elem.innerText = params.text
+              elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
+            } else {
+              tags.push(<title data-id={id}>{params.text}</title>)
             }
           } else if (params.type === 'meta') {
-            const current = tags.find(
-              (tag) => tag.type === 'meta' && tag.props.type === params.type,
-            )
-            if (!current) tags.push(<meta {...params} />)
             if (typeof window !== 'undefined') {
-              const elements = Array.from(
-                document.getElementsByTagName('head')[0].getElementsByTagName('meta'),
-              )
-              const current2 = elements.find((itm) => itm.name === params.name)
-              if (current2 && current2.content === params.content) return
-              else if (current2 && current2.content !== params.content) {
-                current2.content = params.content
-                return
+              const currentElement = document.querySelector(`[data-id="${id}"]`) as HTMLMetaElement || undefined
+              if (currentElement) {
+                currentElement.name = params.name
+                currentElement.content = params.content
+                currentElement.dataset.id = id
+                return;
               }
+              
               const elem = document.createElement('meta')
               elem.name = params.name
               elem.content = params.content
+              elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
+            } else {
+              tags.push(<meta data-id={id} {...params}/>)
+            }
+          } else if (params.type === 'script') {
+            if (typeof window !== 'undefined') {
+              const currentElement = document.querySelector(`[data-id="${id}"]`) as HTMLScriptElement || undefined
+              if (currentElement) {
+                currentElement.type = params.texttype
+                currentElement.innerHTML = params.script
+                currentElement.dataset.id = id
+                return;
+              }
+              
+              const elem = document.createElement('script')
+              elem.type = params.texttype
+              elem.innerHTML = params.script
+              elem.dataset.id = id
+              document.getElementsByTagName('head')[0].appendChild(elem)
+            } else {
+              tags.push(<script data-id={id} type={params.texttype} dangerouslySetInnerHTML={{ __html: params.script }}/>)
             }
           }
         },
@@ -123,14 +133,19 @@ export function HeadProvider(props: HeadProviderProps) {
   )
 }
 
-export function addTag(params: TagParams) {
-  return useContext(HeadContext).addTag(params)
+let currentTagId = 0
+
+export function addTag(params: NewTagParams) {
+  const [id] = useState(currentTagId++)
+  return useContext(HeadContext).addTag({ ...params, id: id.toString()  })
 }
 
 export function useTitle(title: string) {
-  return useContext(HeadContext).addTag({ type: 'title', text: title })
+  const [id] = useState(currentTagId++)
+  return useContext(HeadContext).addTag({ type: 'title', text: title, id: id.toString() })
 }
 
-export function useMetaTag(params: Omit<MetaTagParams, 'type'>) {
-  return useContext(HeadContext).addTag({ type: 'meta', ...params })
+export function useMetaTag(params: Omit<MetaTagParams, 'type' | 'id'>) {
+  const [id] = useState(currentTagId++)
+  return useContext(HeadContext).addTag({ ...params, type: 'meta', id: id.toString()})
 }
