@@ -1,28 +1,28 @@
 import React, { useContext, createContext, ReactNode } from 'react'
 import { globalHistory } from '@reach/router'
 
-interface NewScriptTagParams {
+interface ScriptTagParams {
   type: 'script'
   script: string
   texttype: string
 }
 
-interface NewTitleTagParams {
+interface TitleTagParams {
   type: 'title'
   text: string
 }
 
-interface NewMetaTagParams {
+interface MetaTagParams {
   type: 'meta'
   name: 'description' | 'keywords' | 'author' | 'viewport'
   content: string
 }
 
-type NewTagParams = NewScriptTagParams | NewTitleTagParams | NewMetaTagParams
+type TagParams = ScriptTagParams | TitleTagParams | MetaTagParams
 
 export interface Head {
   tags: JSX.Element[]
-  addTag: (params: NewTagParams) => void
+  addTag: (params: TagParams) => void
 }
 
 const HeadContext = createContext<Head>({
@@ -123,11 +123,7 @@ export function HeadProvider(props: HeadProviderProps) {
   )
 }
 
-interface AddTagProps {
-  tag: JSX.Element
-}
-
-export function AddTag(params: NewTagParams) {
+export function AddTag(params: TagParams) {
   return useContext(HeadContext).addTag(params)
 }
 
@@ -135,6 +131,6 @@ export function useTitle(title: string) {
   return useContext(HeadContext).addTag({ type: 'title', text: title })
 }
 
-export function useMetaTag(params: Omit<NewMetaTagParams, 'type'>) {
+export function useMetaTag(params: Omit<MetaTagParams, 'type'>) {
   return useContext(HeadContext).addTag({ type: 'meta', ...params })
 }
