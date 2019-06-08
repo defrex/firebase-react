@@ -25,6 +25,7 @@ export function Document({ html, css, scripts, state, head }: DocumentProps) {
     <html lang='en-US'>
       <head>
         <link rel='manifest' href='/manifest.json' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
         {head}
         {scripts &&
           scripts.map(({ src }, index) => src && <link rel='preload' href={src} as='script' />)}

@@ -60,15 +60,15 @@ export function HeadProvider(props: HeadProviderProps) {
       )
 
       metaElements.map((itm) => {
-        if (itm.parentNode) itm.parentNode.removeChild(itm)
+        if (itm.parentNode && itm.dataset.id) itm.parentNode.removeChild(itm)
       })
 
       titleElements.map((itm) => {
-        if (itm.parentNode) itm.parentNode.removeChild(itm)
+        if (itm.parentNode && itm.dataset.id) itm.parentNode.removeChild(itm)
       })
 
       scriptElements.map((itm) => {
-        if (itm.parentNode) itm.parentNode.removeChild(itm)
+        if (itm.parentNode && itm.dataset.id) itm.parentNode.removeChild(itm)
       })
     } else {
     }
@@ -110,7 +110,7 @@ export function HeadProvider(props: HeadProviderProps) {
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
-              tags.push(<meta data-id={id} {...params} />)
+              tags.push(<meta data-id={id} name={params.name} content={params.content} />)
             }
           } else if (params.type === 'script') {
             if (typeof window !== 'undefined') {
