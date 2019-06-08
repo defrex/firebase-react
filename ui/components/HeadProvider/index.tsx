@@ -29,7 +29,7 @@ type NewTagParams =
   | Omit<MetaTagParams, 'id'>
 
 export interface Head {
-  tags: JSX.Element[]
+  tags: React.ReactElement[]
   addTag: (params: TagParams) => void
 }
 
@@ -40,7 +40,7 @@ const HeadContext = createContext<Head>({
 
 interface HeadProviderProps {
   children: ReactNode
-  tags: JSX.Element[]
+  tags: React.ReactElement[]
 }
 
 export function HeadProvider(props: HeadProviderProps) {
@@ -93,13 +93,15 @@ export function HeadProvider(props: HeadProviderProps) {
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
-              tags.filter((itm) => itm.props['data-id'] === id).push(<title data-id={id}>{params.text}</title>)
+              if(tags.find((itm) => itm.props.children === params.text && itm.type === 'title')) return;
+              tags.push(<title data-id={id}>{params.text}</title>)
             }
           } else if (params.type === 'meta') {
             if (typeof window !== 'undefined') {
               const currentElement =
                 (document.querySelector(`[data-id="${id}"]`) as HTMLMetaElement) || undefined
               if (currentElement) {
+                if(currentElement.content === params.content) return;
                 currentElement.name = params.name
                 currentElement.content = params.content
                 currentElement.dataset.id = id
@@ -112,13 +114,14 @@ export function HeadProvider(props: HeadProviderProps) {
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
-              tags.filter((itm) => itm.props['data-id'] === id).push(<meta data-id={id} name={params.name} content={params.content} />)
+              tags.push(<meta data-id={id} name={params.name} content={params.content} />)
             }
           } else if (params.type === 'script') {
             if (typeof window !== 'undefined') {
               const currentElement =
                 (document.querySelector(`[data-id="${id}"]`) as HTMLScriptElement) || undefined
               if (currentElement) {
+                if (currentElement.innerHTML === params.script) return;
                 currentElement.type = params.texttype
                 currentElement.innerHTML = params.script
                 currentElement.dataset.id = id
@@ -131,7 +134,7 @@ export function HeadProvider(props: HeadProviderProps) {
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
-              tags.filter((itm) => itm.props['data-id'] === id).push(
+              tags.push(
                 <script
                   data-id={id}
                   type={params.texttype}
