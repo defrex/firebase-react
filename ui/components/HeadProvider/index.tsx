@@ -17,13 +17,16 @@ interface TitleTagParams {
 interface MetaTagParams {
   type: 'meta'
   id: string
-  name: 'description' | 'keywords' | 'author' | 'viewport'
+  name: 'description' | 'keywords' | 'author' | 'viewport' | 'robots' | 'googlebot'
   content: string
 }
 
 type TagParams = ScriptTagParams | TitleTagParams | MetaTagParams
 
-type NewTagParams = Omit<ScriptTagParams, 'id'> | Omit<TitleTagParams, 'id'> | Omit<MetaTagParams, 'id'>
+type NewTagParams =
+  | Omit<ScriptTagParams, 'id'>
+  | Omit<TitleTagParams, 'id'>
+  | Omit<MetaTagParams, 'id'>
 
 export interface Head {
   tags: JSX.Element[]
@@ -68,21 +71,21 @@ export function HeadProvider(props: HeadProviderProps) {
         if (itm.parentNode) itm.parentNode.removeChild(itm)
       })
     } else {
-      
     }
   })
   return (
     <HeadContext.Provider
       value={{
         tags,
-        addTag: ({ id, ...params}) => {
+        addTag: ({ id, ...params }) => {
           if (params.type === 'title') {
             if (typeof window !== 'undefined') {
-              const currentElement = document.querySelector(`[data-id="${id}"]`) as HTMLTitleElement || undefined
+              const currentElement =
+                (document.querySelector(`[data-id="${id}"]`) as HTMLTitleElement) || undefined
               if (currentElement) {
                 currentElement.remove()
               }
-              
+
               const elem = document.createElement('title')
               elem.innerText = params.text
               elem.dataset.id = id
@@ -92,39 +95,47 @@ export function HeadProvider(props: HeadProviderProps) {
             }
           } else if (params.type === 'meta') {
             if (typeof window !== 'undefined') {
-              const currentElement = document.querySelector(`[data-id="${id}"]`) as HTMLMetaElement || undefined
+              const currentElement =
+                (document.querySelector(`[data-id="${id}"]`) as HTMLMetaElement) || undefined
               if (currentElement) {
                 currentElement.name = params.name
                 currentElement.content = params.content
                 currentElement.dataset.id = id
-                return;
+                return
               }
-              
+
               const elem = document.createElement('meta')
               elem.name = params.name
               elem.content = params.content
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
-              tags.push(<meta data-id={id} {...params}/>)
+              tags.push(<meta data-id={id} {...params} />)
             }
           } else if (params.type === 'script') {
             if (typeof window !== 'undefined') {
-              const currentElement = document.querySelector(`[data-id="${id}"]`) as HTMLScriptElement || undefined
+              const currentElement =
+                (document.querySelector(`[data-id="${id}"]`) as HTMLScriptElement) || undefined
               if (currentElement) {
                 currentElement.type = params.texttype
                 currentElement.innerHTML = params.script
                 currentElement.dataset.id = id
-                return;
+                return
               }
-              
+
               const elem = document.createElement('script')
               elem.type = params.texttype
               elem.innerHTML = params.script
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
-              tags.push(<script data-id={id} type={params.texttype} dangerouslySetInnerHTML={{ __html: params.script }}/>)
+              tags.push(
+                <script
+                  data-id={id}
+                  type={params.texttype}
+                  dangerouslySetInnerHTML={{ __html: params.script }}
+                />,
+              )
             }
           }
         },
@@ -135,11 +146,11 @@ export function HeadProvider(props: HeadProviderProps) {
   )
 }
 
-export let currentTagId = 0;
+export let currentTagId = 0
 
 export function addTag(params: NewTagParams) {
   const [id] = useState(currentTagId++)
-  return useContext(HeadContext).addTag({ ...params, id: id.toString()  })
+  return useContext(HeadContext).addTag({ ...params, id: id.toString() })
 }
 
 export function useTitle(title: string) {
@@ -149,5 +160,5 @@ export function useTitle(title: string) {
 
 export function useMetaTag(params: Omit<MetaTagParams, 'type' | 'id'>) {
   const [id] = useState(currentTagId++)
-  return useContext(HeadContext).addTag({ ...params, type: 'meta', id: id.toString()})
+  return useContext(HeadContext).addTag({ ...params, type: 'meta', id: id.toString() })
 }
