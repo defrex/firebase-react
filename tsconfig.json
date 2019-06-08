@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
-    "lib": ["webworker", "dom", "es2017", "esnext.asynciterable"],
+    "lib": ["dom", "es2017", "esnext.asynciterable"],
     "allowJs": false,
     "jsx": "react",
     "outDir": "./dist",
