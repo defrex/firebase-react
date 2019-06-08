@@ -85,7 +85,7 @@ export function HeadProvider(props: HeadProviderProps) {
               if (currentElement) {
                 if (currentElement.innerHTML === params.text) return
                 currentElement.innerHTML = params.text
-                return;
+                return
               }
 
               const elem = document.createElement('title')
@@ -93,7 +93,8 @@ export function HeadProvider(props: HeadProviderProps) {
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
-              if(tags.find((itm) => itm.props.children === params.text && itm.type === 'title')) return;
+              if (tags.find((itm) => itm.props.children === params.text && itm.type === 'title'))
+                return
               tags.push(<title data-id={id}>{params.text}</title>)
             }
           } else if (params.type === 'meta') {
@@ -101,7 +102,7 @@ export function HeadProvider(props: HeadProviderProps) {
               const currentElement =
                 (document.querySelector(`[data-id="${id}"]`) as HTMLMetaElement) || undefined
               if (currentElement) {
-                if(currentElement.content === params.content) return;
+                if (currentElement.content === params.content) return
                 currentElement.name = params.name
                 currentElement.content = params.content
                 currentElement.dataset.id = id
@@ -114,6 +115,15 @@ export function HeadProvider(props: HeadProviderProps) {
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
+              if (
+                tags.find(
+                  (itm) =>
+                    itm.props.content === params.content &&
+                    itm.props.name === params.name &&
+                    itm.type === 'meta',
+                )
+              )
+                return
               tags.push(<meta data-id={id} name={params.name} content={params.content} />)
             }
           } else if (params.type === 'script') {
@@ -121,7 +131,7 @@ export function HeadProvider(props: HeadProviderProps) {
               const currentElement =
                 (document.querySelector(`[data-id="${id}"]`) as HTMLScriptElement) || undefined
               if (currentElement) {
-                if (currentElement.innerHTML === params.script) return;
+                if (currentElement.innerHTML === params.script) return
                 currentElement.type = params.texttype
                 currentElement.innerHTML = params.script
                 currentElement.dataset.id = id
@@ -134,6 +144,15 @@ export function HeadProvider(props: HeadProviderProps) {
               elem.dataset.id = id
               document.getElementsByTagName('head')[0].appendChild(elem)
             } else {
+              if (
+                tags.find(
+                  (itm) =>
+                    itm.type === 'script' &&
+                    itm.props.dangerouslySetInnerHTML.__html === params.script &&
+                    itm.props.type === params.texttype,
+                )
+              )
+                return
               tags.push(
                 <script
                   data-id={id}
