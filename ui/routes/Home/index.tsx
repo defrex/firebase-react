@@ -1,13 +1,12 @@
 import { RouteComponentProps } from '@reach/router'
 import React from 'react'
-import { useSEO } from 'ui/components/useSEO'
+import { useKeywords, useDescription } from 'ui/components/useSEO'
+import { useTitle } from 'ui/components/HeadProvider'
 
 export function HomeRoute(props: RouteComponentProps) {
-  useSEO({ 
-    title: 'Index Page',
-    description: 'Firebase React SSR Demo',
-    keywords: ['Defrex', 'KristianFJones']
-  })
+  useTitle('Index Page')
+  useKeywords(['Defrex', 'KristianFJones'])
+  useDescription('Firebase React SSR Demo')
   return (
     <div>
       <h1>Index</h1>

@@ -172,6 +172,10 @@ export function HeadProvider(props: HeadProviderProps) {
 
 export let currentTagId = 0
 
+export function resetTagID() {
+  return (currentTagId = 0)
+}
+
 export function addTag(params: NewTagParams) {
   const [id] = useState(currentTagId++)
   return useContext(HeadContext).addTag({ ...params, id: id.toString() })

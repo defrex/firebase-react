@@ -7,8 +7,7 @@ import { App } from 'ui/App'
 import { Config, ConfigProvider } from 'ui/components/ConfigProvider'
 import { Document } from 'ui/Document'
 import { initApollo } from 'ui/lib/initApollo'
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { HeadProvider, currentTagId } from 'ui/components/HeadProvider'
+import { HeadProvider, resetTagID } from 'ui/components/HeadProvider'
 
 export default async function(req: Request, res: Response, config: Config) {
   let html = ''
@@ -18,8 +17,9 @@ export default async function(req: Request, res: Response, config: Config) {
     src,
   }))
   const client = initApollo({ baseUrl: config.baseUrl })
-  // @ts-ignore
-  currentTagId = 0
+
+  resetTagID()
+
   let head: JSX.Element[] = []
 
   try {
