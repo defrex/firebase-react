@@ -1,4 +1,4 @@
-import { AddTag } from 'ui/components/HeadProvider';
+import { addTag } from 'ui/components/HeadProvider';
 
 export interface ItemListElements {
   item: string
@@ -26,5 +26,5 @@ export function useBreadCrumbJsonLd(itemListElements: ItemListElements[] = []) {
      ]
   }`
 
-  return AddTag({ type: 'script', script: jslonld, texttype: 'application/ld+json' })
+  return addTag({ type: 'script', script: jslonld, texttype: 'application/ld+json' })
 }

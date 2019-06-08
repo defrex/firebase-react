@@ -123,7 +123,7 @@ export function HeadProvider(props: HeadProviderProps) {
   )
 }
 
-export function AddTag(params: TagParams) {
+export function addTag(params: TagParams) {
   return useContext(HeadContext).addTag(params)
 }
 

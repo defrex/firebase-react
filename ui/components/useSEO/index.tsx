@@ -1,11 +1,11 @@
-import { AddTag } from 'ui/components/HeadProvider'
+import { addTag } from 'ui/components/HeadProvider'
 
 export * from './JSON-LD';
 
 export function useKeywords(keywords: string[]) {
-  return AddTag({ type: 'meta', name: 'keywords', content: keywords.join(',') })
+  return addTag({ type: 'meta', name: 'keywords', content: keywords.join(',') })
 }
 
 export function useDescription(desc: string) {
-  return AddTag({ type: 'meta', name: 'description', content: desc })
+  return addTag({ type: 'meta', name: 'description', content: desc })
 }
