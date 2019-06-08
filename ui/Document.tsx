@@ -17,14 +17,16 @@ interface DocumentProps {
   scripts?: Script[]
   css?: string
   state: AppState
+  head: JSX.Element[]
 }
 
-export function Document({ html, css, scripts, state }: DocumentProps) {
+export function Document({ html, css, scripts, state, head }: DocumentProps) {
   return (
     <html lang='en-US'>
       <head>
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='manifest' href='/manifest.json' />
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        {head}
         {scripts &&
           scripts.map(({ src }, index) => src && <link rel='preload' href={src} as='script' />)}
         {css ? <style id='styles'>{css}</style> : null}
