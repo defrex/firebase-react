@@ -67,6 +67,8 @@ export function HeadProvider(props: HeadProviderProps) {
       scriptElements.map((itm) => {
         if (itm.parentNode) itm.parentNode.removeChild(itm)
       })
+    } else {
+      
     }
   })
   return (
@@ -133,7 +135,7 @@ export function HeadProvider(props: HeadProviderProps) {
   )
 }
 
-let currentTagId = 0
+export let currentTagId = 0;
 
 export function addTag(params: NewTagParams) {
   const [id] = useState(currentTagId++)
