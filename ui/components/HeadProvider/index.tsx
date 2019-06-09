@@ -94,13 +94,13 @@ export function HeadProvider(props: HeadProviderProps) {
             }
           } else if (params.type === 'script') {
             const elem = (
-              <script type={params.type} dangerouslySetInnerHTML={{ __html: params.script }} />
+              <script type={params.texttype} dangerouslySetInnerHTML={{ __html: params.script }} />
             )
             let id = sha256(JSON.stringify(elem.props))
             const element = (
               <script
                 data-id={id}
-                type={params.type}
+                type={params.texttype}
                 dangerouslySetInnerHTML={{ __html: params.script }}
               />
             )
