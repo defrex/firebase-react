@@ -34,6 +34,7 @@
     "fs-extra": "^8.0.1",
     "graphql": "^14.3.1",
     "grpc": "^1.21.1",
+    "hash-it": "^4.0.4",
     "isomorphic-unfetch": "^3.0.0",
     "morgan": "^1.9.1",
     "node-typescript-compiler": "^2.0.0",

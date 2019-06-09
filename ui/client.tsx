@@ -15,7 +15,7 @@ if ('serviceWorker' in navigator) {
 
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
   renderFunction(
-    <HeadProvider tags={[]}>
+    <HeadProvider tags={[]} hashes={[]}>
       <ConfigProvider {...window.APP_STATE.CONFIG}>
         <ApolloProvider
           client={initApollo({
