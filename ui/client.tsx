@@ -4,7 +4,7 @@ import ReactDOM, { Renderer } from 'react-dom'
 import { App as AppComponent } from 'ui/App'
 import { ConfigProvider } from 'ui/components/ConfigProvider'
 import { initApollo } from 'ui/lib/initApollo'
-import { HeadProvider } from './components/HeadProvider'
+import { HeadProvider, clearHead } from './components/HeadProvider'
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async function() {
@@ -13,9 +13,11 @@ if ('serviceWorker' in navigator) {
   })
 }
 
+const hashes: string[] = []
+
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
   renderFunction(
-    <HeadProvider tags={[]}>
+    <HeadProvider tags={[]} hashes={hashes}>
       <ConfigProvider {...window.APP_STATE.CONFIG}>
         <ApolloProvider
           client={initApollo({
@@ -36,6 +38,7 @@ render(ReactDOM.hydrate, AppComponent)
 const hot = (module as any).hot
 if (hot && hot.accept) {
   hot.accept(() => {
+    clearHead(hashes)
     render(ReactDOM.render, require('ui/App').App)
   })
 }
