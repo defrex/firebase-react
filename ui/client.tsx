@@ -1,6 +1,7 @@
 import React from 'react'
 import { ApolloProvider } from 'react-apollo-hooks'
 import ReactDOM, { Renderer } from 'react-dom'
+import { preloadReady } from 'react-loadable'
 import { App as AppComponent } from 'ui/App'
 import { ConfigProvider } from 'ui/components/ConfigProvider'
 import { initApollo } from 'ui/lib/initApollo'
@@ -14,6 +15,7 @@ if ('serviceWorker' in navigator) {
 }
 
 async function render(renderFunction: Renderer, App: typeof AppComponent) {
+  await preloadReady()
   renderFunction(
     <HeadProvider tags={[]}>
       <ConfigProvider {...window.APP_STATE.CONFIG}>
