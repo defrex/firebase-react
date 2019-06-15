@@ -1,4 +1,4 @@
-import { useMetaTag } from 'ui/components/HeadProvider'
+import { useMetaTag } from '../HeadProvider'
 
 export * from './JSON-LD'
 

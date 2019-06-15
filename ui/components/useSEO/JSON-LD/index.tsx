@@ -1,4 +1,4 @@
-import { addTag } from 'ui/components/HeadProvider';
+import { addTag } from '../../HeadProvider'
 
 export interface ItemListElements {
   item: string

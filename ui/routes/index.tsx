@@ -1,8 +1,22 @@
 import { Router } from '@reach/router'
 import React from 'react'
-import { ExampleRoute } from 'ui/routes/Example'
-import { HomeRoute } from 'ui/routes/Home'
-import { QueryRoute } from 'ui/routes/Query'
+import Loadable from 'react-loadable'
+import { HomeRoute } from './Home'
+import Loader from '../components/Loader'
+
+const ExampleRoute = Loadable({
+  loader: () => import('./Example'),
+  modules: ['./Example'],
+  loading: Loader,
+  delay: 500,
+})
+
+const QueryRoute = Loadable({
+  loader: () => import('./Query'),
+  modules: ['./Query'],
+  loading: Loader,
+  delay: 500,
+})
 
 export function Routes() {
   return (

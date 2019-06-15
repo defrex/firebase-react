@@ -1,7 +1,7 @@
 import { RouteComponentProps } from '@reach/router'
 import React from 'react'
-import { useKeywords, useDescription } from 'ui/components/useSEO'
-import { useTitle } from 'ui/components/HeadProvider'
+import { useKeywords, useDescription } from '../../components/useSEO'
+import { useTitle } from '../../components/HeadProvider'
 
 export function HomeRoute(props: RouteComponentProps) {
   useTitle('Index Page')

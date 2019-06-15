@@ -1,7 +1,7 @@
 import { Link } from '@reach/router'
 import React from 'react'
-import { useConfig } from 'ui/components/ConfigProvider'
-import { Routes } from 'ui/routes'
+import { useConfig } from './components/ConfigProvider'
+import { Routes } from './routes'
 
 export function App() {
   const { baseUrl } = useConfig()
