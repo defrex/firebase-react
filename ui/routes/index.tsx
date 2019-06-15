@@ -1,13 +1,19 @@
 import { Router } from '@reach/router'
 import React from 'react'
 import Loadable from 'react-loadable'
-import { HomeRoute } from 'ui/routes/Home'
-import { QueryRoute } from 'ui/routes/Query'
-import Loader from 'ui/components/Loader'
+import { HomeRoute } from './Home'
+import Loader from '../components/Loader'
 
-const Example = Loadable({
-  loader: () => import('ui/routes/Example'),
-  modules: ['ui/routes/Example'],
+const ExampleRoute = Loadable({
+  loader: () => import('./Example'),
+  modules: ['./Example'],
+  loading: Loader,
+  delay: 500,
+})
+
+const QueryRoute = Loadable({
+  loader: () => import('./Query'),
+  modules: ['./Query'],
   loading: Loader,
   delay: 500,
 })
@@ -16,7 +22,7 @@ export function Routes() {
   return (
     <Router>
       <HomeRoute path='/' />
-      <Example path='/example' />
+      <ExampleRoute path='/example' />
       <QueryRoute path='/query' />
     </Router>
   )

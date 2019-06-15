@@ -2,20 +2,22 @@ import { isRedirect, ServerLocation } from '@reach/router'
 import { Request, Response } from 'express'
 import React from 'react'
 import { ApolloProvider, getMarkupFromTree } from 'react-apollo-hooks'
-import { Capture } from 'react-loadable'
+import { Capture, preloadAll } from 'react-loadable'
 import { renderToString } from 'react-dom/server'
-import { App } from 'ui/App'
-import { Config, ConfigProvider } from 'ui/components/ConfigProvider'
-import { HeadProvider, resetTagID } from 'ui/components/HeadProvider'
-import { Document } from 'ui/Document'
-import { initApollo } from 'ui/lib/initApollo'
+import { App } from './App'
+import { Config, ConfigProvider } from './components/ConfigProvider'
+import { HeadProvider, resetTagID } from './components/HeadProvider'
+import { Document } from './Document'
+import { initApollo } from './lib/initApollo'
+import { readJSON } from 'fs-extra'
 
 export async function uiServer(req: Request, res: Response, config: Config) {
-  const clientAssetsFile = './client.json'
-  const manifestFile = './parcel-manifest.json'
+  await preloadAll()
+  const clientAssetsFile = 'public/client.json'
+  const manifestFile = 'public/parcel-manifest.json'
   const [clientAssets, parcelManifest] = await Promise.all([
-    require(clientAssetsFile),
-    require(manifestFile) as Promise<{ [key: string]: string }>,
+    readJSON(clientAssetsFile),
+    readJSON(manifestFile) as Promise<{ [key: string]: string }>,
   ])
   const scripts = Object.values(clientAssets).filter(
     (script) => typeof script === 'string',
@@ -30,19 +32,19 @@ export async function uiServer(req: Request, res: Response, config: Config) {
     <ServerLocation url={req.url}>
       <ConfigProvider {...config}>
         <HeadProvider tags={head}>
-          <ApolloProvider client={client}>
-            <Capture
-              report={(moduleName) =>
-                Object.entries(parcelManifest).map(([file, script]) =>
-                  file.replace('/index.tsx', '') === moduleName.replace('ui/', '')
-                    ? scripts.push(script)
-                    : '',
-                )
-              }
-            >
+          <Capture
+            report={(moduleName) =>
+              Object.entries(parcelManifest).map(([file, script]) =>
+                file.replace('/index.tsx', '') === moduleName.replace('ui/', '')
+                  ? scripts.push(script)
+                  : '',
+              )
+            }
+          >
+            <ApolloProvider client={client}>
               <App />
-            </Capture>
-          </ApolloProvider>
+            </ApolloProvider>
+          </Capture>
         </HeadProvider>
       </ConfigProvider>
     </ServerLocation>
@@ -50,7 +52,7 @@ export async function uiServer(req: Request, res: Response, config: Config) {
 
   let html = ''
   try {
-    html = await getMarkupFromTree({
+    await getMarkupFromTree({
       renderFunction: renderToString,
       tree: app,
     })
@@ -64,6 +66,8 @@ export async function uiServer(req: Request, res: Response, config: Config) {
 
   const state = client.cache.extract()
 
+  html = renderToString(app)
+
   const document = renderToString(
     <Document
       html={html}
@@ -72,5 +76,6 @@ export async function uiServer(req: Request, res: Response, config: Config) {
       head={head}
     />,
   )
+
   res.status(200).send(`<!DOCTYPE html>${document}`)
 }

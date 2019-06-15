@@ -6,10 +6,6 @@ export const hello = https.onRequest((req, res) => {
   res.send('Hello Functions')
 })
 
-const uiServerPromise = hotUiServer()
-export const ui = https.onRequest(async (req, res) => {
-  const uiServer = await uiServerPromise
-  return uiServer(req, res)
-})
+export const ui = https.onRequest(hotUiServer)
 
 export const api = https.onRequest(apiServer)

@@ -12,9 +12,17 @@ export async function build(watch: boolean = false) {
 
   await run('tsc --build functions/tsconfig.json')
 
-  const bundler = new ParcelBundler(['ui/client.urls', 'ui/server.urls'], {
+  const bundler = new ParcelBundler(['ui/client.urls'], {
     outDir: 'dist/public',
     watch,
+    target: 'browser',
+  })
+
+  const serverbundler = new ParcelBundler(['ui/server.urls'], {
+    outDir: 'dist/server',
+    watch,
+    target: 'node',
   })
   await bundler.bundle()
+  await serverbundler.bundle()
 }

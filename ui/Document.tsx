@@ -1,6 +1,6 @@
 import { NormalizedCacheObject } from 'apollo-boost'
 import React from 'react'
-import { Config } from 'ui/components/ConfigProvider'
+import { Config } from './components/ConfigProvider'
 
 export interface AppState {
   APOLLO_STATE: NormalizedCacheObject

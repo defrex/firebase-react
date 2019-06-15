@@ -1,6 +1,6 @@
 import { RouteComponentProps } from '@reach/router'
 import React from 'react'
-import { useTitle } from 'ui/components/HeadProvider'
+import { useTitle } from '../../components/HeadProvider'
 
 export default function ExampleRoute(props: RouteComponentProps) {
   useTitle('Example Page')

@@ -36,6 +36,7 @@
     "grpc": "^1.21.1",
     "isomorphic-unfetch": "^3.0.0",
     "morgan": "^1.9.1",
+    "multistream": "^2.1.1",
     "ora": "^3.4.0",
     "parcel-plugin-assets-list": "^1.7.1",
     "parcel-plugin-bundle-manifest": "^0.2.0",
@@ -47,6 +48,7 @@
     "require-from-string": "^2.0.2",
     "type-graphql": "^0.17.4",
     "ui": "^0.2.4",
+    "used-styles": "^1.1.0",
     "workbox": "0.0.0"
   },
   "devDependencies": {
