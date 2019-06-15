@@ -35,7 +35,8 @@ export async function uiServer(req: Request, res: Response, config: Config) {
           <Capture
             report={(moduleName) =>
               Object.entries(parcelManifest).map(([file, script]) =>
-                file.replace('/index.tsx', '') === moduleName.replace('ui/', '')
+                file.replace('routes/', './').replace('/index.tsx', '') === moduleName &&
+                !scripts.includes(script)
                   ? scripts.push(script)
                   : '',
               )
